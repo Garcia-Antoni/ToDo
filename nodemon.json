@@ -1,0 +1,11 @@
+{
+    "ext": ".js",
+    "watch": [
+        "src/routes",
+        "src/controllers",
+        "src/middlewares",
+        "src/main.js",
+        "nodemon.json"
+    ],
+    "ignore": []
+}

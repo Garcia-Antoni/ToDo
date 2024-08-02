@@ -1,0 +1,26 @@
+{
+  "type": "module",
+  "name": "todo",
+  "version": "1.0.0",
+  "description": "With this project, you will create tasks in an sortable and grouped list, where you have allow update its current state.",
+  "main": "src/main.js",
+  "scripts": {
+    "run_server": "node src/main.js",
+    "debugging_mode": "nodemon"
+  },
+  "keywords": [
+    "JavaScript",
+    "Node.js",
+    "Express.js",
+    "API RESTful"
+  ],
+  "author": "Antoni García",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}

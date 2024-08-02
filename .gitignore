@@ -1,0 +1,7 @@
+package-lock.json
+
+# Avoiding an overload of files in the repository
+node_modules
+
+# This environment variables should be hidden from the public
+.env
