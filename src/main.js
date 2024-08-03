@@ -7,17 +7,19 @@ import cors from 'cors';
 import HttpException from './helpers/HttpException.helper.js';
 import exception_formatter from './middlewares/exception_formatter.middleware.js';
 
-dotenv.config(); // If you exclude this line, the use of an environment variable in this file is impossible.
+import sequelize from './config/database.config.js';
+
+dotenv.config(); // If you exclude this line, using an environment variable in the file is impossible.
 
 const application = express();
 
-const cors_configuration = {
+const configuration_$cors = {
     optionsSuccessStatus: 200,
     allowedHeaders: ['Content-Type', 'Authorization'],
     methods: ['GET', 'PUT', 'POST'],
     origin: ['http://localhost:3000'],
 };
-application.use(cors(cors_configuration)); // It's a configuration applicable to any endpoint existing.
+application.use(cors(configuration_$cors)); // It's a configuration applicable to any endpoint existing.
 
 application.use(express.json()); // It expects an 'application/json' in the 'Content-Type' header, and parses the JSON payload to an JavaScript object.
 
@@ -29,7 +31,15 @@ application.all('*', (request, response, next_middleware) => {
 });
 application.use(exception_formatter); // 'Captures' any HTTP exception, and give it a standar format.
 
-const PORT = process.env.PORT || 3000;
-application.listen(PORT, () => {
-    console.log(`Listen in the ${PORT} port... \nServer is running normally.`);
-});
+// Synchronizing all the current, and future, entities with a database server (the '127.0.0.1' host).
+(async ({ force = false } = {}) => {
+    await sequelize.sync({ force })
+        .then(() => {
+            const PORT = process.env.PORT || 3000;
+            application.listen(PORT, () => console.log({ message: `Listen in the ${PORT} port... Server is running normally.` }));
+        })
+        .catch((exception) => {
+            const { original } = exception; // The 'exception' variable has this interanl structure 👉 {name: '', parent: { code: '', errno: '', sqlState: '', sqlMessage: '', sql: '' }, original: { code: '', errno: '', sqlState: '', sqlMessage: '', sql: '' } }.
+            console.log({ code: original.code, message: original.sqlMessage });
+        });
+})();
